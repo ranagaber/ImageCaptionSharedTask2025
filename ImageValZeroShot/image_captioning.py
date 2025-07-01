@@ -17,7 +17,7 @@ from qwen_vl_utils import process_vision_info
 class ArabicImageCaptioner:
     """Class for generating Arabic captions for images using Qwen2.5-VL model."""
     
-    def __init__(self, model_name="Qwen/Qwen2.5-VL-7B-Instruct"):
+    def __init__(self, model_name="Qwen/Qwen2.5-VL-7B-Instruct", checkpoint_path=None):
         """
         Initialize the captioner with the specified model.
         
@@ -28,19 +28,21 @@ class ArabicImageCaptioner:
         self.model = None
         self.processor = None
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        
+        self.checkpoint_path = checkpoint_path
     def load_model(self):
         """Load the model and processor."""
         print(f"Loading model: {self.model_name}")
         print(f"Using device: {self.device}")
         
+        loading_path = self.checkpoint_path if self.checkpoint_path else self.model_name
+
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
-            self.model_name,
+            loading_path,
             torch_dtype=torch.bfloat16,
             device_map="auto",
             attn_implementation="eager"
         )
-        
+                
         self.processor = AutoProcessor.from_pretrained(self.model_name)
         print("Model and processor loaded successfully!")
         
@@ -179,11 +181,17 @@ def main():
         default=128,
         help="Maximum number of tokens to generate (default: 128)"
     )
+    parser.add_argument(
+        "--checkpoint_path", 
+        type=str, 
+        default=None,
+        help="Path to checkpoint file"
+    )
     
     args = parser.parse_args()
     
     # Initialize captioner
-    captioner = ArabicImageCaptioner(model_name=args.model_name)
+    captioner = ArabicImageCaptioner(model_name=args.model_name, checkpoint_path=args.checkpoint_path)
     captioner.load_model()
     
     # Process images
