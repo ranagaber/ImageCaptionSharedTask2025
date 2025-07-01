@@ -44,7 +44,7 @@ TRAINING_CONFIG = {
     "cutoff_len": 1024,
     "overwrite_cache": True,
     "preprocessing_num_workers": 2,
-    "dataloader_num_workers": 1,
+    "dataloader_num_workers": 0,
 }
 
 # Conservative settings for limited VRAM
@@ -54,7 +54,7 @@ CONSERVATIVE_CONFIG.update({
     "gradient_accumulation_steps": 32,
     "per_device_train_batch_size": 1,
     "preprocessing_num_workers": 1,
-    "dataloader_num_workers": 1,
+    "dataloader_num_workers": 0,
 })
 
 # Paths (adjust these according to your setup)

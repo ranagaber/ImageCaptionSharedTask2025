@@ -96,7 +96,9 @@ Caption to Evaluate:
 """,
     "temperature": 0,
     "max_retries": 3,
-    "structured_output": True
+    "structured_output": True,
+    "model_id": "gpt-4o",
+    "base_url": "https://api.openai.com/v1"
 }
 
 # Visualization settings

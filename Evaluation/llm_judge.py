@@ -10,7 +10,6 @@ from tqdm import tqdm
 import pandas as pd
 import evaluation_config as config
 
-
 class Judgement(BaseModel):
     """Pydantic model for structured LLM judge output."""
     score: int

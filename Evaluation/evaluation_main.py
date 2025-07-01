@@ -148,13 +148,13 @@ class ArabicCaptionEvaluator:
         summary = {}
         for metric in metrics:
             if metric in results_df.columns:
-                summary[f'{metric}_mean'] = round(results_df[metric].mean(), 4)
-                summary[f'{metric}_std'] = round(results_df[metric].std(), 4)
-                summary[f'{metric}_median'] = round(results_df[metric].median(), 4)
-                summary[f'{metric}_min'] = round(results_df[metric].min(), 4)
-                summary[f'{metric}_max'] = round(results_df[metric].max(), 4)
-                summary[f'{metric}_q25'] = round(results_df[metric].quantile(0.25), 4)
-                summary[f'{metric}_q75'] = round(results_df[metric].quantile(0.75), 4)
+                summary[f'{metric}_mean'] = float(round(results_df[metric].mean(), 4))
+                summary[f'{metric}_std'] = float(round(results_df[metric].std(), 4))
+                summary[f'{metric}_median'] = float(round(results_df[metric].median(), 4))
+                summary[f'{metric}_min'] = float(round(results_df[metric].min(), 4))
+                summary[f'{metric}_max'] = float(round(results_df[metric].max(), 4))
+                summary[f'{metric}_q25'] = float(round(results_df[metric].quantile(0.25), 4))
+                summary[f'{metric}_q75'] = float(round(results_df[metric].quantile(0.75), 4))
         
         return summary
     
@@ -177,10 +177,10 @@ class ArabicCaptionEvaluator:
         categories = config.PERFORMANCE_CATEGORIES
         
         category_counts = {
-            'excellent': len(scores[scores > categories['excellent']]),
-            'good': len(scores[(scores > categories['good']) & (scores <= categories['excellent'])]),
-            'fair': len(scores[(scores > categories['fair']) & (scores <= categories['good'])]),
-            'poor': len(scores[scores <= categories['fair']])
+            'excellent': int(len(scores[scores > categories['excellent']])),
+            'good': int(len(scores[(scores > categories['good']) & (scores <= categories['excellent'])])),
+            'fair': int(len(scores[(scores > categories['fair']) & (scores <= categories['good'])])),
+            'poor': int(len(scores[scores <= categories['fair']]))
         }
         
         return category_counts
