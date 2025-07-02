@@ -18,7 +18,11 @@ The dataset comprises images with Arabic captions. It is divided into:
 - **Development Set**
 - **Test Set**
 
-To participate in the shared task and get a training and development dataset, please register in ([the official registration form](https://forms.gle/qn4NDr6PYW49bLns7)). The test dataset will be shared only during the test phase in the shared task ([see the deadlines](https://sina.birzeit.edu/image_eval2025/index.html))
+To participate in the shared task, please register in ([the official registration form](https://forms.gle/qn4NDr6PYW49bLns7)).
+
+The training and development datasets are available in the [SinaLab/ImageEval2025Task2TrainDataset](https://huggingface.co/datasets/SinaLab/ImageEval2025Task2TrainDataset) dataset.
+
+ The test dataset will be shared only during the test phase in the shared task ([see the deadlines](https://sina.birzeit.edu/image_eval2025/index.html))
 
 
 ## 🗂️ Project Structure
