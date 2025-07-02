@@ -87,67 +87,6 @@ python setup_training.py \
 python run_training.py --base_dir /path/to/your/data
 ```
 
-## Advanced Usage
-
-### Using the Trainer Class Directly
-
-```python
-from finetune_trainer import ArabicImageCaptionTrainer
-
-# Initialize trainer
-trainer = ArabicImageCaptionTrainer(base_dir="/path/to/your/data")
-
-# Setup environment
-trainer.setup_environment()
-
-# Prepare dataset
-trainer.prepare_dataset()
-
-# Create training config
-config_path = trainer.create_training_config(conservative=True)
-
-# Start training
-trainer.start_training(config_path)
-
-# Evaluate model
-results = trainer.evaluate_model()
-```
-
-### Custom Training Configuration
-
-```python
-# Create custom configuration
-custom_config = {
-    "learning_rate": 1e-5,
-    "num_train_epochs": 10,
-    "lora_rank": 16,
-    "per_device_train_batch_size": 2
-}
-
-config_path = trainer.create_training_config(
-    conservative=False,
-    custom_config=custom_config
-)
-```
-
-### Command Line Training
-
-```bash
-# Full training pipeline
-python finetune_trainer.py \
-    --base_dir /path/to/data \
-    --excel_file /path/to/TrainSubtask2.xlsx \
-    --images_dir /path/to/images \
-    --conservative
-
-# Evaluation only
-python finetune_trainer.py \
-    --base_dir /path/to/data \
-    --evaluate_only \
-    --checkpoint checkpoint-50 \
-    --max_eval_images 100
-```
-
 ## Configuration Options
 
 ### Standard vs Conservative Settings
@@ -280,42 +219,6 @@ Input: Image of historical building
 Output: صورة تاريخية تظهر مبنى قديم في القدس
 ```
 
-## Advanced Topics
-
-### Custom Dataset Format
-
-To use your own dataset format, modify the dataset creation in `finetune_utils.py`:
-
-```python
-def create_custom_dataset(data_source, output_path):
-    training_data = []
-    # Your custom data processing logic
-    return training_data
-```
-
-### Multi-GPU Training
-
-LlamaFactory supports multi-GPU training. Set in config:
-```yaml
-ddp_find_unused_parameters: false
-dataloader_num_workers: 4
-```
-
-### Inference Optimization
-
-For faster inference, consider:
-- Converting to ONNX format
-- Using TensorRT optimization
-- Quantization (INT8/INT4)
-
-## Contributing
-
-To extend the fine-tuning pipeline:
-
-1. Add custom configurations in `finetune_config.py`
-2. Extend utility functions in `finetune_utils.py`
-3. Modify the trainer class for new features
-4. Update documentation
 
 ## License
 
