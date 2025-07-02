@@ -2,6 +2,8 @@
 
 This repository contains official baselines for the **Arabic Image Captioning Shared Task 2025**, which aims to advance the development of culturally aware Arabic image captioning models. The task provides an Arabic-language dataset and invites participants to generate natural captions for images using zero-shot or fine-tuned approaches. This repository includes two baseline systems using Qwen2.5-VL 7B, along with an evaluation script.
 
+**🤗 Fine-tuned Model**: [Sinalab/Qwen2.5-VL-7B-Instruct-Image-Captioning](https://huggingface.co/Sinalab/Qwen2.5-VL-7B-Instruct-Image-Captioning)
+
 ## 📂 Contents
 
 - A zero-shot baseline for generating captions using Qwen2.5-VL 7B without fine-tuning.
