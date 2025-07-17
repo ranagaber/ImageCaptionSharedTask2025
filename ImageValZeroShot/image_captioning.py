@@ -38,7 +38,7 @@ class ArabicImageCaptioner:
 
         self.model = Qwen2_5_VLForConditionalGeneration.from_pretrained(
             loading_path,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float16,
             device_map="auto",
             attn_implementation="eager"
         )
