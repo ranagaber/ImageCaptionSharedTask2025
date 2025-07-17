@@ -43,7 +43,7 @@ class ArabicImageCaptioner:
             attn_implementation="eager"
         )
                 
-        self.processor = AutoProcessor.from_pretrained(self.model_name)
+        self.processor = AutoProcessor.from_pretrained(self.model_name , use_fast=True)
         print("Model and processor loaded successfully!")
         
     def generate_caption(self, image_path, max_new_tokens=128):
