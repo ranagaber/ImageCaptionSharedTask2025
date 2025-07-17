@@ -47,65 +47,61 @@ class ArabicImageCaptioner:
         print("Model and processor loaded successfully!")
         
     def generate_caption(self, image_path, max_new_tokens=128):
-        """
-        Generate Arabic caption for a single image.
-        
-        Args:
-            image_path (str): Path to the image file
-            max_new_tokens (int): Maximum number of tokens to generate
-            
-        Returns:
-            str: Generated Arabic caption
-        """
-        try:
-            image = Image.open(image_path)
-            
-            messages = [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "image", "image": image},
-                        {
-                            "type": "text",
-                            "text": (
-                                "You are an expert in visual scene understanding and multilingual caption generation."
-                                "Analyze the content of this image, which is potentially related to the palestnian Nakba"
-                                "and Israeli occupation of Palestine, and provide a concise and meaningful caption in Arabic - about 15 to 50 words."
-                                "The caption should reflect the scene's content, emotional context, and should be natural and culturally appropriate."
-                                " Do not include any English or metadata — The caption must be in Arabic."
-                            ),
-                        },
-                    ],
-                }
-            ]
-            
-            text = self.processor.apply_chat_template(
-                messages, tokenize=False, add_generation_prompt=True
-            )
-            image_inputs, _ = process_vision_info(messages)
-            inputs = self.processor(
-                text=[text],
-                images=image_inputs,
-                padding=True,
-                return_tensors="pt",
-            )
-            inputs = inputs.to(self.model.device)
-            
-            with torch.no_grad():
-                generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens)
-            
-            generated_ids_trimmed = [
-                out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
-            ]
-            output_text = self.processor.batch_decode(
-                generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            )
-            
-            return output_text[0].strip()
-            
-        except Exception as e:
-            print(f"Error processing {image_path}: {e}")
-            return ""
+    try:
+        image = Image.open(image_path).convert("RGB")
+        image = image.resize((512, 512))
+
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image": image},
+                    {
+                        "type": "text",
+                        "text": (
+                            "You are an expert in visual scene understanding and multilingual caption generation."
+                            "Analyze the content of this image, which is potentially related to the palestnian Nakba"
+                            "and Israeli occupation of Palestine, and provide a concise and meaningful caption in Arabic - about 15 to 50 words."
+                            "The caption should reflect the scene's content, emotional context, and should be natural and culturally appropriate."
+                            " Do not include any English or metadata — The caption must be in Arabic."
+                        ),
+                    },
+                ],
+            }
+        ]
+
+        text = self.processor.apply_chat_template(
+            messages, tokenize=False, add_generation_prompt=True
+        )
+        image_inputs, _ = process_vision_info(messages)
+        inputs = self.processor(
+            text=[text],
+            images=image_inputs,
+            padding=True,
+            return_tensors="pt",
+        )
+        inputs = inputs.to(self.model.device)
+
+        with torch.no_grad():
+            generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens)
+
+        generated_ids_trimmed = [
+            out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+        ]
+        output_text = self.processor.batch_decode(
+            generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+        )
+
+        # Explicitly delete large tensors
+        del image_inputs, inputs, generated_ids, generated_ids_trimmed
+        torch.cuda.empty_cache()
+
+        return output_text[0].strip()
+
+    except Exception as e:
+        print(f"Error processing {image_path}: {e}")
+        return ""
+
     
     def process_folder(self, image_folder, output_csv, supported_formats=('.png', '.jpg', '.jpeg')):
         """
