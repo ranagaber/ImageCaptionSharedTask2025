@@ -46,7 +46,7 @@ class ArabicImageCaptioner:
         self.processor = AutoProcessor.from_pretrained(self.model_name , use_fast = True)
         print("Model and processor loaded successfully!")
         
-    def generate_caption(self, image_path, max_new_tokens= 8):
+    def generate_caption(self, image_path, max_new_tokens= 128):
         """
         Generate Arabic caption for a single image.
         
@@ -178,8 +178,8 @@ def main():
     parser.add_argument(
         "--max_tokens", 
         type=int, 
-        default= 8,
-        help="Maximum number of tokens to generate (default: 8)"
+        default= 128,
+        help="Maximum number of tokens to generate (default: 128)"
     )
     parser.add_argument(
         "--checkpoint_path", 
