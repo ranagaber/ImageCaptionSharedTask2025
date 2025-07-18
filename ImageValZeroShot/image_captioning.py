@@ -46,7 +46,7 @@ class ArabicImageCaptioner:
         self.processor = AutoProcessor.from_pretrained(self.model_name , use_fast = True)
         print("Model and processor loaded successfully!")
         
-    def generate_caption(self, image_path, max_new_tokens=128):
+    def generate_caption(self, image_path, max_new_tokens= 8):
         """
         Generate Arabic caption for a single image.
         
