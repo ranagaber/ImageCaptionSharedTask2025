@@ -243,10 +243,11 @@ class ArabicImageCaptionTrainer:
             print("Loading fine-tuned model...")
             model = Qwen2VLForConditionalGeneration.from_pretrained(
                 checkpoint_path,
-                torch_dtype=torch.bfloat16,
-                device_map="auto"
-            )
-            processor = AutoProcessor.from_pretrained(config.DEFAULT_MODEL_NAME)
+                torch_dtype=torch.float16,
+                device_map="auto",
+                attn_implementation="eager"
+            ).eval().half() 
+            processor = AutoProcessor.from_pretrained(config.DEFAULT_MODEL_NAME , use_fast = True)
             print("✅ Model loaded successfully")
             
         except Exception as e:
@@ -304,7 +305,8 @@ class ArabicImageCaptionTrainer:
         processor
     ) -> Dict:
         """Process a single image and generate caption."""
-        image = Image.open(image_path)
+        image = Image.open(image_path).convert("RGB")
+        image = image.resize((512, 512))
         
         # Create prompt
         messages = [
@@ -324,7 +326,7 @@ class ArabicImageCaptionTrainer:
         inputs = processor(text=[text], images=[image], return_tensors="pt", padding=True)
         inputs = inputs.to("cuda")
         
-        with torch.no_grad():
+        with torch.torch.inference_mode():
             outputs = model.generate(
                 **inputs,
                 pad_token_id=processor.tokenizer.eos_token_id,
@@ -338,7 +340,8 @@ class ArabicImageCaptionTrainer:
             arabic_caption = response.split("assistant\n")[-1].strip()
         else:
             arabic_caption = response.split("Describe this image in Arabic.")[-1].strip()
-        
+        del caption, image_path
+        torch.cuda.empty_cache()
         return {
             "image_file": image_file,
             "image_path": image_path,
