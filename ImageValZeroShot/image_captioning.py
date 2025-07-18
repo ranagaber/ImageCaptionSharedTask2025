@@ -90,9 +90,9 @@ class ArabicImageCaptioner:
                 return_tensors="pt",
             )
             inputs = inputs.to(self.model.device)
-            
+            torch.cuda.empty_cache()
             with torch.no_grad():
-                generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens)
+                generated_ids = self.model.generate(**inputs, max_new_tokens=max_new_tokens ,  use_cache=False)
             
             generated_ids_trimmed = [
                 out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
@@ -178,8 +178,8 @@ def main():
     parser.add_argument(
         "--max_tokens", 
         type=int, 
-        default=128,
-        help="Maximum number of tokens to generate (default: 128)"
+        default= 8,
+        help="Maximum number of tokens to generate (default: 8)"
     )
     parser.add_argument(
         "--checkpoint_path", 
