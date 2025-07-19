@@ -15,7 +15,7 @@ TRAINING_CONFIG = {
     "lora_alpha": 16,
     "lora_dropout": 0.1,
     "lora_target": "all",
-    
+
     # Training parameters
     "per_device_train_batch_size": 1,
     "gradient_accumulation_steps": 16,
@@ -25,13 +25,13 @@ TRAINING_CONFIG = {
     "warmup_ratio": 0.1,
     "fp16": True,
     "gradient_checkpointing": True,
-    
+
     # Evaluation
     "val_size": 0.2,
     "per_device_eval_batch_size": 1,
     "eval_strategy": "steps",
     "eval_steps": 10,
-    
+
     # Logging and saving
     "logging_steps": 5,
     "save_steps": 25,
@@ -39,7 +39,7 @@ TRAINING_CONFIG = {
     "overwrite_output_dir": True,
     "save_only_model": False,
     "report_to": "none",
-    
+
     # Data processing
     "cutoff_len": 1024,
     "overwrite_cache": True,
@@ -61,7 +61,7 @@ CONSERVATIVE_CONFIG.update({
 DEFAULT_PATHS = {
     "base_dir": "/content/drive/MyDrive/ImageVal",
     "train_dir": "/content/drive/MyDrive/ImageVal/Train",
-    "test_dir": "/content/drive/MyDrive/ImageVal/Test", 
+    "test_dir": "/content/drive/MyDrive/ImageVal/Test",
     "images_dir": "/content/drive/MyDrive/ImageVal/Train/images",
     "test_images_dir": "/content/drive/MyDrive/ImageVal/Test/images",
     "excel_file": "/content/drive/MyDrive/ImageVal/Train/TrainSubtask2.xlsx",
@@ -93,7 +93,7 @@ GENERATION_CONFIG = {
     "repetition_penalty": 1.1,
 }
 
-# YAML template for LlamaFactory
+# YAML template for LlamaFactory with 4-bit quantization
 YAML_TEMPLATE = """### model
 model_name_or_path: {model_name}
 image_max_pixels: {image_max_pixels}
@@ -140,4 +140,10 @@ val_size: {val_size}
 per_device_eval_batch_size: {per_device_eval_batch_size}
 eval_strategy: {eval_strategy}
 eval_steps: {eval_steps}
+
+### quantization
+load_in_4bit: true
+bnb_4bit_compute_dtype: float16
+bnb_4bit_use_double_quant: true
+bnb_4bit_quant_type: nf4
 """
