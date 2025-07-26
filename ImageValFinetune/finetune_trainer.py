@@ -44,7 +44,7 @@ class ArabicImageCaptionTrainer:
         return True
 
     def prepare_dataset(self, excel_file: Optional[str] = None, images_dir: Optional[str] = None, dataset_name: str = config.DATASET_CONFIG["name"]) -> bool:
-        print("=== Preparing Training Dataset ===")
+        #print("=== Preparing Training Dataset ===")
         excel_file = excel_file or self.paths["excel_file"]
         images_dir = images_dir or self.paths["images_dir"]
 
