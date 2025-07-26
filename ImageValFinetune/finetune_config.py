@@ -5,7 +5,7 @@ Configuration file for Arabic Image Captioning Fine-tuning
 import os
 
 # Model configuration
-DEFAULT_MODEL_NAME = "Qwen/Qwen2.5-VL-7B-Instruct"
+DEFAULT_MODEL_NAME = "MBZUAI/AIN"
 IMAGE_MAX_PIXELS = 131072
 
 # Training configuration
