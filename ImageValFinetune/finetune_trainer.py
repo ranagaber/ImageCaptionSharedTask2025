@@ -43,7 +43,7 @@ class ArabicImageCaptionTrainer:
         print("✅ Environment setup complete")
         return True
 
-    def prepare_dataset(
+        def prepare_dataset(
         self,
         excel_file: Optional[str] = None,
         images_dir: Optional[str] = None,
@@ -58,6 +58,14 @@ class ArabicImageCaptionTrainer:
         if not os.path.exists(images_dir):
             print(f"❌ Images directory not found: {images_dir}")
             return False
+
+        # ✅ Add diagnostic check here
+        df = pd.read_excel(excel_file)
+        sample_filename = df.iloc[0]["Image"]
+        sample_path = os.path.join(images_dir, sample_filename)
+        print(f"📂 Sample image filename: {sample_filename}")
+        print(f"📍 Sample full path: {sample_path}")
+        print(f"✅ File exists? {os.path.exists(sample_path)}")
 
         json_path = os.path.join(self.base_dir, "llamafactory_training_data.json")
         if not utils.create_training_dataset(excel_file, images_dir, json_path):
