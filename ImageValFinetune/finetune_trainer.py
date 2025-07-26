@@ -56,7 +56,7 @@ class ArabicImageCaptionTrainer:
 
         # ✅ Add diagnostic check here
         df = pd.read_excel(excel_file)
-        sample_filename = df.iloc[0]["Image"]
+        sample_filename = df.iloc[0]["File Name"]
         sample_path = os.path.join(images_dir, sample_filename)
         print(f"📂 Sample image filename: {sample_filename}")
         print(f"📍 Sample full path: {sample_path}")
