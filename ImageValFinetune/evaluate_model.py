@@ -6,6 +6,8 @@ Script to evaluate trained models and generate captions
 import os
 import sys
 import argparse
+import json
+import pandas as pd
 from finetune_trainer import ArabicImageCaptionTrainer
 
 
@@ -43,7 +45,8 @@ def main():
     test_images_dir = args.test_images or trainer.paths["test_images_dir"]
     
     # Run evaluation
-    print("Starting model evaluation...")
+    print("=== Evaluating Fine-tuned Model ===")
+    print("Loading fine-tuned model...")
     results = trainer.evaluate_model(
         checkpoint_path=checkpoint_path,
         test_images_dir=test_images_dir,
@@ -53,8 +56,19 @@ def main():
     if results:
         print(f"\n✅ Evaluation completed successfully!")
         print(f"Processed {len(results)} images")
+
+        # 🔄 Save to JSON
+        json_path = os.path.join(trainer.paths["output_dir"], "generated_captions.json")
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(results, f, ensure_ascii=False, indent=2)
+        print(f"📝 Captions saved to: {json_path}")
+
+        # 🔄 Save to CSV
+        csv_path = os.path.join(trainer.paths["output_dir"], "generated_captions.csv")
+        pd.DataFrame(results).to_csv(csv_path, index=False)
+        print(f"📝 Captions also saved to: {csv_path}")
         
-        # Show some sample results
+        # 📌 Show some sample results
         print("\n=== Sample Results ===")
         for i, result in enumerate(results[:3]):
             print(f"\n{i+1}. {result['image_file']}")
